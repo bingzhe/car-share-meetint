@@ -12,9 +12,11 @@ const WX_AUTH_URL =
 export default function wxAuth() {
   return new Promise((resolve, reject) => {
     let code = getUrlParam("code");
+    console.log(code);
     if (!code) {
       //未经过微信授权
       let currentUrl = encodeURIComponent(window.location.href);
+
       window.location.replace(WX_AUTH_URL.replace("REDIRECT_URI", currentUrl));
     } else {
       let param = {
