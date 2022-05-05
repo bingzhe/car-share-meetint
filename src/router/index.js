@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
 
 import publish from "@/components/publish.vue";
 import jyorder from "@/components/jyorder.vue"; //加油订单
@@ -108,49 +107,35 @@ const routes = [
       title: "充值",
     },
   },
-  // {
-  //   path: "/publish",
-  //   name: "publish",
-  //   component: publish,
-  // },
-  // {
-  //   path: "/jyorder",
-  //   name: "加油订单列表",
-  //   component: jyorder,
-  // },
-  // {
-  //   path: "/xcorder",
-  //   name: "洗车订单列表",
-  //   component: xcorder,
-  // },
-  // {
-  //   path: "/xcorder1",
-  //   name: "xcorder1",
-  //   component: xcorder1,
-  // },
-  // {
-  //   path: "/order_details",
-  //   name: "订单详情",
-  //   component: order_details,
-  // },
-  // {
-  //   path: "/jyorder1",
-  //   name: "jyorder1",
-  //   component: jyorder1,
-  // },
   {
-    path: "/",
-    name: "home",
-    component: HomeView,
+    path: "/publish",
+    name: "publish",
+    component: publish,
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/jyorder",
+    name: "加油订单列表",
+    component: jyorder,
+  },
+  {
+    path: "/xcorder",
+    name: "洗车订单列表",
+    component: xcorder,
+  },
+  {
+    path: "/xcorder1",
+    name: "xcorder1",
+    component: xcorder1,
+  },
+  {
+    path: "/order_details",
+    name: "订单详情",
+    component: order_details,
+  },
+  {
+    path: "/jyorder1",
+    name: "jyorder1",
+    component: jyorder1,
   },
 ];
 

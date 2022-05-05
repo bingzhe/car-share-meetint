@@ -1,3 +1,4 @@
+import wx from "weixin-js-sdk";
 import { getJSSDK } from "@/api/wx";
 import router from "@/router";
 const wxShare = () => {
@@ -46,11 +47,14 @@ const wxShare = () => {
           success: function () {},
         });
         resolve();
-      } else if (data && data.data.code == 401) {
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.reload();
-      } else {
+      }
+      // TODO
+      // else if (data && data.data.code == 401) {
+      //   localStorage.clear();
+      //   sessionStorage.clear();
+      //   window.location.reload();
+      // }
+      else {
         alert(JSON.stringify(data));
       }
     });
