@@ -10,6 +10,11 @@ const qs = require("qs");
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 
+import "vant/lib/index.css";
+
+import { prefix } from "@/util/util";
+Vue.prototype.prefix = prefix;
+
 import {
   Swipe,
   Lazyload,

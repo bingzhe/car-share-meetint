@@ -18,6 +18,10 @@
           <img src="@/assets/images/index2.png" class="icon" />
           <span>洗车保养</span>
         </div>
+        <div class="f-item" @click="toShopmall">
+          <img src="@/assets/images/shopmall.png" class="icon" />
+          <span>商城</span>
+        </div>
         <div class="f-item" @click="toWait">
           <img src="@/assets/images/index3.png" class="icon" />
           <span>违章查询</span>
@@ -46,10 +50,10 @@
           <img src="@/assets/images/index9.png" class="icon" />
           <span>挪车码</span>
         </div>
-        <div class="f-item" @click="toWait">
+        <!-- <div class="f-item" @click="toWait">
           <img src="@/assets/images/index10.png" class="icon" />
           <span>全部</span>
-        </div>
+        </div> -->
       </div>
       <!-- 列表 -->
       <div class="list-box">
@@ -229,6 +233,9 @@ export default {
     },
     toXclist() {
       this.$router.push("/xclist");
+    },
+    toShopmall() {
+      this.$router.push("/mall/home");
     },
     getLocationFn() {
       getLocation().then((data) => {

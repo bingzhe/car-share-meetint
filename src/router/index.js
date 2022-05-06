@@ -137,6 +137,14 @@ const routes = [
     name: "jyorder1",
     component: jyorder1,
   },
+  {
+    path: "/mall/home",
+    name: "mallHome",
+    meta: {
+      index: 1,
+    },
+    component: () => import("@/views/shopmall/Home.vue"),
+  },
 ];
 
 const router = new VueRouter({
