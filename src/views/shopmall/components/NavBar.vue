@@ -1,19 +1,19 @@
 <template>
   <div class="nav-bar">
     <ul class="nav-list">
-      <router-link tag="li" class="nav-list-item active" to="home">
+      <router-link tag="li" class="nav-list-item active" to="/mall/home">
         <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
         <span>首页</span>
       </router-link>
-      <router-link tag="li" class="nav-list-item" to="category">
+      <router-link tag="li" class="nav-list-item" to="/mall/category">
         <i class="nbicon nbfenlei"></i>
         <span>分类</span>
       </router-link>
-      <router-link tag="li" class="nav-list-item" to="cart">
+      <router-link tag="li" class="nav-list-item" to="/mall/cart">
         <van-icon name="shopping-cart-o" :info="!count ? '' : count" />
         <span>购物车</span>
       </router-link>
-      <router-link tag="li" class="nav-list-item" to="user">
+      <router-link tag="li" class="nav-list-item" to="/mall/user">
         <i class="nbicon nblvsefenkaicankaoxianban-"></i>
         <span>我的</span>
       </router-link>
@@ -71,10 +71,10 @@ export default {
       }
       i {
         text-align: center;
-        font-size: 22px;
+        font-size: 26px;
       }
       span {
-        font-size: 12px;
+        font-size: 14px;
       }
       .van-icon-shopping-cart-o {
         margin: 0 auto;

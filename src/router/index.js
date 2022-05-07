@@ -145,6 +145,86 @@ const routes = [
     },
     component: () => import("@/views/shopmall/Home.vue"),
   },
+  {
+    path: "/mall/cart",
+    name: "mallCart",
+    meta: {
+      index: 1,
+    },
+    component: () => import("@/views/shopmall/Cart.vue"),
+  },
+  {
+    path: "/mall/category",
+    name: "mallCategory",
+    meta: {
+      index: 1,
+    },
+    component: () => import("@/views/shopmall/Category.vue"),
+  },
+  {
+    path: "/mall/product-list",
+    name: "mallProductList",
+    meta: {
+      index: 2,
+    },
+    component: () => import("@/views/shopmall/ProductList.vue"),
+  },
+  {
+    path: "/mall/product/:id",
+    name: "mallProduct",
+    meta: {
+      index: 3,
+    },
+    component: () => import("@/views/shopmall/ProductDetail.vue"),
+  },
+  {
+    path: "/mall/user",
+    name: "mallUser",
+    meta: {
+      index: 1,
+    },
+    component: () => import("@/views/shopmall/User.vue"),
+  },
+  {
+    path: "/mall/order",
+    name: "mallOrder",
+    meta: {
+      index: 2,
+    },
+    component: () => import("@/views/shopmall/Order.vue"),
+  },
+  {
+    path: "/mall/order-detail",
+    name: "mallOrderDetail",
+    meta: {
+      index: 3,
+    },
+    component: () => import("@/views/shopmall/OrderDetail.vue"),
+  },
+  {
+    path: "/mall/create-order",
+    name: "mallCreateOrder",
+    meta: {
+      index: 2,
+    },
+    component: () => import("@/views/shopmall/CreateOrder.vue"),
+  },
+  {
+    path: "/mall/address",
+    name: "mallAddress",
+    meta: {
+      index: 2,
+    },
+    component: () => import("@/views/shopmall/Address.vue"),
+  },
+  {
+    path: "/mall/address-edit",
+    name: "mallAddressEdit",
+    meta: {
+      index: 3,
+    },
+    component: () => import("@/views/shopmall/AddressEdit.vue"),
+  },
 ];
 
 const router = new VueRouter({

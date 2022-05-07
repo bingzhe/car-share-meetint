@@ -9,34 +9,81 @@ const qs = require("qs");
 
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-
-import "vant/lib/index.css";
+Vue.use(ElementUI);
 
 import { prefix } from "@/util/util";
 Vue.prototype.prefix = prefix;
 
+import "vant/lib/index.css";
 import {
-  Swipe,
-  Lazyload,
-  SwipeItem,
+  Divider,
+  Popup,
+  Overlay,
+  Loading,
+  Dialog,
+  ContactCard,
+  Form,
+  AddressEdit,
+  AddressList,
+  Field,
+  CellGroup,
+  Cell,
+  SwipeCell,
   Icon,
-  RadioGroup,
-  Radio,
+  Stepper,
+  Card,
+  Checkbox,
+  CheckboxGroup,
+  Button,
+  Swipe,
+  SwipeItem,
+  PullRefresh,
+  List,
   Tab,
   Tabs,
+  GoodsAction,
+  GoodsActionIcon,
+  GoodsActionButton,
+  SubmitBar,
   Toast,
+  Lazyload,
+  RadioGroup,
+  Radio,
 } from "vant";
 
-Vue.use(ElementUI);
-Vue.use(Swipe);
-Vue.use(SwipeItem);
-Vue.use(Lazyload);
-Vue.use(Icon);
-Vue.use(RadioGroup);
-Vue.use(Radio);
-Vue.use(Tab);
-Vue.use(Tabs);
-Vue.use(Toast);
+Vue.use(Divider)
+  .use(Popup)
+  .use(Overlay)
+  .use(Loading)
+  .use(Dialog)
+  .use(Toast)
+  .use(ContactCard)
+  .use(Form)
+  .use(AddressEdit)
+  .use(AddressList)
+  .use(Field)
+  .use(CellGroup)
+  .use(Cell)
+  .use(SwipeCell)
+  .use(Icon)
+  .use(Stepper)
+  .use(Card)
+  .use(Button)
+  .use(Swipe)
+  .use(SwipeItem)
+  .use(PullRefresh)
+  .use(List)
+  .use(Tab)
+  .use(Tabs)
+  .use(GoodsAction)
+  .use(GoodsActionIcon)
+  .use(GoodsActionButton)
+  .use(SubmitBar)
+  .use(Checkbox)
+  .use(CheckboxGroup)
+  .use(Lazyload)
+  .use(RadioGroup)
+  .use(Radio);
 
 Vue.config.productionTip = false;
 
