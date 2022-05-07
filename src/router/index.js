@@ -149,7 +149,7 @@ const routes = [
     path: "/mall/cart",
     name: "mallCart",
     meta: {
-      index: 1,
+      title: "购物车",
     },
     component: () => import("@/views/shopmall/Cart.vue"),
   },
@@ -157,7 +157,7 @@ const routes = [
     path: "/mall/category",
     name: "mallCategory",
     meta: {
-      index: 1,
+      title: "商品列表",
     },
     component: () => import("@/views/shopmall/Category.vue"),
   },
@@ -181,7 +181,7 @@ const routes = [
     path: "/mall/user",
     name: "mallUser",
     meta: {
-      index: 1,
+      title: "商城个人中心",
     },
     component: () => import("@/views/shopmall/User.vue"),
   },
@@ -189,7 +189,7 @@ const routes = [
     path: "/mall/order",
     name: "mallOrder",
     meta: {
-      index: 2,
+      title: "订单列表",
     },
     component: () => import("@/views/shopmall/Order.vue"),
   },
@@ -197,7 +197,7 @@ const routes = [
     path: "/mall/order-detail",
     name: "mallOrderDetail",
     meta: {
-      index: 3,
+      title: "订单详情",
     },
     component: () => import("@/views/shopmall/OrderDetail.vue"),
   },
@@ -205,7 +205,7 @@ const routes = [
     path: "/mall/create-order",
     name: "mallCreateOrder",
     meta: {
-      index: 2,
+      title: "创建订单",
     },
     component: () => import("@/views/shopmall/CreateOrder.vue"),
   },
@@ -213,7 +213,7 @@ const routes = [
     path: "/mall/address",
     name: "mallAddress",
     meta: {
-      index: 2,
+      title: "我的地址",
     },
     component: () => import("@/views/shopmall/Address.vue"),
   },
@@ -221,7 +221,7 @@ const routes = [
     path: "/mall/address-edit",
     name: "mallAddressEdit",
     meta: {
-      index: 3,
+      title: "地址编辑",
     },
     component: () => import("@/views/shopmall/AddressEdit.vue"),
   },

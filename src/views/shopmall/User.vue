@@ -1,7 +1,7 @@
 <template>
   <div class="user-box">
-    <s-header :name="'我的'"></s-header>
-    <div class="user-info">
+    <!-- <s-header :name="'我的'"></s-header> -->
+    <!-- <div class="user-info">
       <div class="info">
         <img src="//s.weituibao.com/1583583975067/user-graduate%20(1).png" />
         <div class="user-desc">
@@ -10,7 +10,7 @@
           <span class="name">个性签名：{{ user.introduceSign }}</span>
         </div>
       </div>
-    </div>
+    </div> -->
     <ul class="user-list">
       <li @click="goTo('/mall/order')">
         <span>我的订单</span>
@@ -27,12 +27,12 @@
 
 <script>
 import navBar from "./components/NavBar";
-import sHeader from "./components/SimpleHeader";
+// import sHeader from "./components/SimpleHeader";
 // import { getUserInfo } from "../service/user";
 export default {
   components: {
     navBar,
-    sHeader,
+    // sHeader,
   },
   data() {
     return {
@@ -125,14 +125,14 @@ export default {
     padding: 0 20px;
     margin-top: 20px;
     li {
-      height: 40px;
-      line-height: 40px;
+      height: 60px;
+      line-height: 60px;
       border-bottom: 1px solid #e9e9e9;
       display: flex;
       justify-content: space-between;
-      font-size: 14px;
+      font-size: 16px;
       .van-icon-arrow {
-        margin-top: 13px;
+        margin-top: 20px;
       }
     }
   }

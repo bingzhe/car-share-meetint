@@ -1,6 +1,5 @@
 <template>
   <div class="cart-box">
-    <s-header :name="'购物车'"></s-header>
     <div class="cart-body">
       <van-checkbox-group
         @change="groupChange"
@@ -59,7 +58,7 @@
       <van-icon name="smile-o" />
       <div class="title">购物车空空空如也</div>
       <van-button color="#1baeae" type="primary" @click="goTo" block
-        >前往首页</van-button
+        >前往选择</van-button
       >
     </div>
     <nav-bar></nav-bar>
@@ -83,7 +82,6 @@ export default {
   },
   components: {
     navBar,
-    sHeader,
   },
   mounted() {
     this.init();
@@ -112,7 +110,7 @@ export default {
       this.$router.go(-1);
     },
     goTo() {
-      this.$router.push({ path: "/mall/home" });
+      this.$router.push({ path: "/mall/category" });
     },
     async onChange(value, detail) {
       if (

@@ -1,7 +1,7 @@
 <template>
   <div class="categray">
     <div>
-      <header class="category-header wrap">
+      <!-- <header class="category-header wrap">
         <i class="nbicon nbfanhui" @click="goHome"></i>
         <div class="header-search">
           <i class="nbicon nbSearch"></i>
@@ -13,59 +13,41 @@
           >
         </div>
         <i class="iconfont icon-More"></i>
-      </header>
+      </header> -->
       <nav-bar></nav-bar>
       <div class="search-wrap" ref="searchWrap">
         <list-scroll :scroll-data="categoryData" class="nav-side-wrapper">
           <ul class="nav-side">
             <li
               v-for="item in categoryData"
-              :key="item.categoryId"
-              v-text="item.categoryName"
-              :class="{ active: currentIndex == item.categoryId }"
-              @click="selectMenu(item.categoryId)"
+              :key="item.category_id"
+              v-text="item.category_name"
+              :class="{ active: currentIndex == item.category_id }"
+              @click="selectMenu(item.category_id)"
             ></li>
           </ul>
         </list-scroll>
         <div class="search-content">
-          <list-scroll :scroll-data="categoryData">
-            <div class="swiper-container">
-              <div class="swiper-wrapper">
-                <template v-for="(category, index) in categoryData">
-                  <div
-                    class="swiper-slide"
-                    v-if="currentIndex == category.categoryId"
-                    :key="index"
-                  >
-                    <!-- <img class="category-main-img" :src="category.mainImgUrl" v-if="category.mainImgUrl"/> -->
-                    <div
-                      class="category-list"
-                      v-for="(
-                        products, index
-                      ) in category.secondLevelCategoryVOS"
-                      :key="index"
+          <list-scroll :scroll-data="goodsList">
+            <div>
+              <div
+                class="product-item"
+                v-for="(item, index) in goodsList"
+                :key="index"
+                @click="addCart(item)"
+              >
+                <img :src="prefix(item.goods_img)" />
+                <div class="product-info">
+                  <p class="name">{{ item.goods_name }}</p>
+                  <p class="subtitle">{{ item.goods_remarks }}</p>
+
+                  <div class="price-wrapper">
+                    <span class="price">￥ {{ item.goods_price }}</span>
+                    <span class="goods-stock"
+                      >库存：{{ item.goods_stock }}</span
                     >
-                      <p class="catogory-title">{{ products.categoryName }}</p>
-                      <div
-                        class="product-item"
-                        v-for="(
-                          product, index
-                        ) in products.thirdLevelCategoryVOS"
-                        :key="index"
-                        @click="selectProduct(product)"
-                      >
-                        <img
-                          src="//s.weituibao.com/1583591077131/%E5%88%86%E7%B1%BB.png"
-                          class="product-img"
-                        />
-                        <p
-                          v-text="product.categoryName"
-                          class="product-title"
-                        ></p>
-                      </div>
-                    </div>
                   </div>
-                </template>
+                </div>
               </div>
             </div>
           </list-scroll>
@@ -78,6 +60,7 @@
 <script>
 import navBar from "./components/NavBar";
 import listScroll from "./components/ListScroll";
+import { fet } from "@/api/constants.js";
 // import { getCategory } from "../service/good";
 export default {
   components: {
@@ -87,28 +70,178 @@ export default {
   data() {
     return {
       categoryData: [],
-      currentIndex: 15,
+      goodsList: [
+        {
+          goods_id: "1",
+          goods_price: "100",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "测试",
+          goods_remarks: "测试测试测试测试测试测试",
+          goods_stock: "10",
+          ctime: "1651754649",
+          status: "1",
+        },
+        {
+          goods_id: "2",
+          goods_price: "200",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "4",
+          goods_name: "测试2",
+          goods_remarks: null,
+          goods_stock: "100",
+          ctime: "1651840254",
+          status: "1",
+        },
+        {
+          goods_id: "3",
+          goods_price: "12",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "3",
+          goods_name: "葡萄",
+          goods_remarks: null,
+          goods_stock: "100",
+          ctime: "1651840433",
+          status: "0",
+        },
+        {
+          goods_id: "4",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+        {
+          goods_id: "5",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+        {
+          goods_id: "6",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+        {
+          goods_id: "7",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+        {
+          goods_id: "8",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+        {
+          goods_id: "9",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+        {
+          goods_id: "99",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+        {
+          goods_id: "422",
+          goods_price: "210",
+          goods_img:
+            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+          category_id: "2",
+          goods_name: "香水",
+          goods_remarks: null,
+          goods_stock: "10",
+          ctime: "1651840461",
+          status: "0",
+        },
+      ],
+      currentIndex: 1,
     };
   },
-  async mounted() {
+  mounted() {
     this.setWrapHeight();
     // const { data } = await getCategory();
     // this.categoryData = data;
+    this.getCategory();
   },
   methods: {
-    goHome() {
-      this.$router.push({ path: "/mall/home" });
+    async getCategory() {
+      const params = {
+        action: "get_categorylist",
+      };
+      const { data } = await fet("/shopmall/web_route.php", params, "post");
+      console.log(data);
+      this.categoryData = data.result || [];
     },
     setWrapHeight() {
       // 设置视口高度
       let $screenHeight = document.documentElement.clientHeight;
-      this.$refs.searchWrap.style.height = $screenHeight - 100 + "px";
+      this.$refs.searchWrap.style.height = $screenHeight - 50 + "px";
     },
-    selectMenu(index) {
-      this.currentIndex = index;
+    async selectMenu(id) {
+      this.currentIndex = id;
+      const params = {
+        action: "get_goodslist",
+        category_id: id,
+      };
+      const { data } = await fet("/shopmall/web_route.php", params, "post");
+      this.goodsList = data.result || [];
     },
     selectProduct(item) {
       this.$router.push({ path: `product-list?categoryId=${item.categoryId}` });
+    },
+    //TODO 加入购物车
+    addCart(record) {
+      console.log(record);
     },
   },
 };
@@ -163,7 +296,7 @@ export default {
 .search-wrap {
   .fj();
   width: 100%;
-  margin-top: 50px;
+  // margin-top: 50px;
   background: #f8f8f8;
   border-top: 1px solid #999;
   .nav-side-wrapper {
@@ -211,27 +344,83 @@ export default {
             font-weight: 500;
             padding: 20px 0;
           }
-          .product-item {
-            width: 33.3333%;
-            margin-bottom: 10px;
-            text-align: center;
-            font-size: 15px;
-            .product-img {
-              .wh(30px, 30px);
-            }
-          }
+          // .product-item {
+          //   width: 33.3333%;
+          //   margin-bottom: 10px;
+          //   text-align: center;
+          //   font-size: 15px;
+          //   .product-img {
+          //     .wh(30px, 30px);
+          //   }
+          // }
         }
       }
     }
   }
 }
-.fade-out-enter-active,
-.fade-out-leave-active {
-  // transition: opacity 0.5s;
-}
 
-.fade-out-enter,
-.fade-out-leave-to {
-  // opacity: 0;
+.product-item {
+  // .fj();
+  display: flex;
+  width: 100%;
+  height: 80px;
+  padding: 10px 0;
+  border-bottom: 1px solid #dcdcdc;
+
+  img {
+    width: 80px;
+    height: 80px;
+    // padding: 0 10px;
+    margin-right: 8px;
+    .boxSizing();
+  }
+  .product-info {
+    // width: 56%;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80px;
+    padding: 5px;
+    text-align: left;
+    .boxSizing();
+    p {
+      margin: 0;
+    }
+    .name {
+      width: 100%;
+      max-height: 40px;
+      line-height: 20px;
+      font-size: 15px;
+      color: #333;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .subtitle {
+      width: 100%;
+      max-height: 20px;
+      // padding: 10px 0;
+      line-height: 25px;
+      font-size: 12px;
+      color: #999;
+      overflow: hidden;
+    }
+    .price {
+      color: @primary;
+      font-size: 16px;
+    }
+
+    .price-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .goods-stock {
+        font-size: 12px;
+        color: #666;
+      }
+    }
+  }
 }
 </style>

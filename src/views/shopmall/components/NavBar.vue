@@ -1,14 +1,14 @@
 <template>
   <div class="nav-bar">
     <ul class="nav-list">
-      <router-link tag="li" class="nav-list-item active" to="/mall/home">
+      <router-link tag="li" class="nav-list-item active" to="/mall/category">
         <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
         <span>首页</span>
       </router-link>
-      <router-link tag="li" class="nav-list-item" to="/mall/category">
+      <!-- <router-link tag="li" class="nav-list-item" to="/mall/category">
         <i class="nbicon nbfenlei"></i>
         <span>分类</span>
-      </router-link>
+      </router-link> -->
       <router-link tag="li" class="nav-list-item" to="/mall/cart">
         <van-icon name="shopping-cart-o" :info="!count ? '' : count" />
         <span>购物车</span>

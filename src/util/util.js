@@ -11,7 +11,8 @@ export const prefix = (url) => {
   if (url && url.startsWith("http")) {
     return url;
   } else {
-    url = `http://backend-api-01.newbee.ltd${url}`;
+    //TODO 图片前缀
+    url = `http://h5.shouchuangtx.cn${url}`;
     return url;
   }
 };

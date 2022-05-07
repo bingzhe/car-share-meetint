@@ -235,7 +235,7 @@ export default {
       this.$router.push("/xclist");
     },
     toShopmall() {
-      this.$router.push("/mall/home");
+      this.$router.push("/mall/category");
     },
     getLocationFn() {
       getLocation().then((data) => {

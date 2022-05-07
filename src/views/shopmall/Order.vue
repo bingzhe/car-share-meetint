@@ -1,6 +1,5 @@
 <template>
   <div class="order-box">
-    <s-header :name="'我的订单'" :back="'/mall/user'"></s-header>
     <van-tabs
       @change="onChangeTab"
       :color="'#1baeae'"
@@ -9,8 +8,7 @@
       v-model="status"
     >
       <van-tab title="全部" name=""></van-tab>
-      <van-tab title="待付款" name="0"></van-tab>
-      <van-tab title="待确认" name="1"></van-tab>
+      <van-tab title="待付款" name="1"></van-tab>
       <van-tab title="待发货" name="2"></van-tab>
       <van-tab title="已发货" name="3"></van-tab>
       <van-tab title="交易完成" name="4"></van-tab>
@@ -67,9 +65,7 @@ export default {
       page: 1,
     };
   },
-  components: {
-    sHeader,
-  },
+  components: {},
   async mounted() {
     // this.loadData()
   },
@@ -137,14 +133,14 @@ export default {
   }
   .order-tab {
     // margin-top: 44px;
-    top: 44px;
+    top: 0;
     position: fixed;
     left: 0;
     z-index: 1000;
     width: 100%;
   }
   .order-list-refresh {
-    margin-top: 68px;
+    margin-top: 44px;
     .van-card__content {
       display: flex;
       flex-direction: column;
@@ -154,7 +150,7 @@ export default {
       background: #f9f9f9;
     }
     .van-list {
-      min-height: calc(100vh - 88px);
+      min-height: calc(100vh);
       background: #f9f9f9;
       margin-top: 20px;
     }
