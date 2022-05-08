@@ -25,7 +25,7 @@
 import { getLocal } from "@/util/util";
 export default {
   mounted() {
-    const token = getLocal("token");
+    const token = getLocal("userInfo");
     const path = this.$route.path;
     if (token && path != "/home") {
       this.$store.dispatch("updateCart");

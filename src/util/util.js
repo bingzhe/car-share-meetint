@@ -12,7 +12,7 @@ export const prefix = (url) => {
     return url;
   } else {
     //TODO 图片前缀
-    url = `http://h5.shouchuangtx.cn${url}`;
+    url = `http://cadmin.shouchuangtx.cn/${url}`;
     return url;
   }
 };

@@ -1,6 +1,5 @@
 <template>
   <div class="create-order">
-    <s-header :name="'生成订单'" @callback="deleteLocal"></s-header>
     <div class="address-wrap">
       <div class="name" @click="goTo">
         <span>{{ address.userName }} </span>
@@ -67,18 +66,17 @@
 </template>
 
 <script>
-import sHeader from "./components/SimpleHeader";
 // import { getCart, getByCartItemIds } from "../service/cart";
 // import { getDefaultAddress, getAddressDetail } from "../service/address";
 // import { createOrder, payOrder } from "../service/order";
 import { setLocal, getLocal } from "@/util/util";
 import { Toast } from "vant";
 export default {
-  components: {
-    sHeader,
-  },
+  components: {},
   data() {
     return {
+      phone: "",
+
       cartList: [],
       address: {},
       showPay: false,
@@ -87,15 +85,23 @@ export default {
     };
   },
   mounted() {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+    this.phone = userInfo.phone;
+    if (!this.phone) {
+      Toast("请先登录");
+    }
+
     this.init();
   },
   methods: {
     async init() {
       Toast.loading({ message: "加载中...", forbidClick: true });
       const { addressId, cartItemIds } = this.$route.query;
+
       const _cartItemIds = cartItemIds
         ? JSON.parse(cartItemIds)
         : JSON.parse(getLocal("cartItemIds"));
+
       setLocal("cartItemIds", JSON.stringify(_cartItemIds));
       //   const { data: list } = await getByCartItemIds({
       //     cartItemIds: _cartItemIds.join(","),
@@ -158,7 +164,7 @@ export default {
     margin-bottom: 20px;
     background: #fff;
     position: relative;
-    margin-top: 44px;
+    // margin-top: 44px;
     font-size: 14px;
     padding: 15px;
     color: #222333;

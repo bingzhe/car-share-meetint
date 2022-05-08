@@ -123,7 +123,7 @@ export default {
   }
   .user-list {
     padding: 0 20px;
-    margin-top: 20px;
+    // margin-top: 20px;
     li {
       height: 60px;
       line-height: 60px;

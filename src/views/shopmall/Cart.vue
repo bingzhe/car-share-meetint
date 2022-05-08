@@ -12,22 +12,22 @@
           :key="index"
         >
           <div class="good-item">
-            <van-checkbox :name="item.cartItemId" />
+            <van-checkbox :name="item.cart_id" />
             <div class="good-img">
-              <img :src="prefix(item.goodsCoverImg)" alt="" />
+              <img :src="prefix(item.goods_img)" alt="" />
             </div>
             <div class="good-desc">
               <div class="good-title">
-                <span>{{ item.goodsName }}</span>
-                <span>x{{ item.goodsCount }}</span>
+                <span>{{ item.goods_name }}</span>
+                <span>x{{ item.goods_num }}</span>
               </div>
               <div class="good-btn">
-                <div class="price">¥{{ item.sellingPrice }}</div>
+                <div class="price">¥{{ item.goods_price }}</div>
                 <van-stepper
                   integer
                   :min="1"
-                  :value="item.goodsCount"
-                  :name="item.cartItemId"
+                  :value="item.goods_num"
+                  :name="item.cart_id"
                   async-change
                   @change="onChange"
                 />
@@ -40,7 +40,7 @@
             icon="delete"
             type="danger"
             class="delete-button"
-            @click="deleteGood(item.cartItemId)"
+            @click="deleteGood(item.cart_id)"
           />
         </van-swipe-cell>
       </van-checkbox-group>
@@ -68,11 +68,14 @@
 <script>
 import { Toast } from "vant";
 import navBar from "./components/NavBar";
-import sHeader from "./components/SimpleHeader";
+import { fet } from "@/api/constants.js";
+
 // import { getCart, deleteCartItem, modifyCart } from "../service/cart";
 export default {
   data() {
     return {
+      phone: "",
+
       checked: false,
       list: [],
       all: false,
@@ -84,16 +87,22 @@ export default {
     navBar,
   },
   mounted() {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+    this.phone = userInfo.phone;
+    if (!this.phone) {
+      Toast("请先登录");
+    }
+
     this.init();
   },
   computed: {
     total: function () {
       let sum = 0;
       let _list = this.list.filter((item) =>
-        this.result.includes(item.cartItemId)
+        this.result.includes(item.cart_id)
       );
       _list.forEach((item) => {
-        sum += item.goodsCount * item.sellingPrice;
+        sum += item.goods_num * item.goods_price;
       });
       return sum;
     },
@@ -101,9 +110,15 @@ export default {
   methods: {
     async init() {
       Toast.loading({ message: "加载中...", forbidClick: true });
-      //   const { data } = await getCart({ pageNumber: 1 });
-      //   this.list = data;
-      //   this.result = data.map((item) => item.cartItemId);
+      const params = {
+        action: "cart_list",
+        phone: this.phone, // 用户账号
+      };
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const { data } = result;
+
+      this.list = data.result;
+      this.result = data.result.map((item) => item.cart_id);
       Toast.clear();
     },
     goBack() {
@@ -113,39 +128,73 @@ export default {
       this.$router.push({ path: "/mall/category" });
     },
     async onChange(value, detail) {
-      if (
-        this.list.filter((item) => item.cartItemId == detail.name)[0]
-          .goodsCount == value
-      )
-        return;
+      const goods = this.list.filter((item) => item.cart_id == detail.name)[0];
+      const num = goods.goods_num;
+      if (num == value) return;
+
       Toast.loading({ message: "修改中...", forbidClick: true });
+
       const params = {
-        cartItemId: detail.name,
-        goodsCount: value,
+        action: "cart_save",
+        phone: this.phone,
+        goods_id: goods.goods_id,
+        goods_num: value,
+        cart_id: detail.name,
       };
-      //   const { data } = await modifyCart(params);
-      //   this.list.forEach((item) => {
-      //     if (item.cartItemId == detail.name) {
-      //       item.goodsCount = value;
-      //     }
-      //   });
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const { data } = result;
+      const code = data.code;
+
+      if (code == 200) {
+        this.list.forEach((item) => {
+          if (item.cart_id == detail.name) {
+            item.goods_num = value;
+          }
+        });
+        this.$store.dispatch("updateCart");
+      }
+
       Toast.clear();
     },
+    //TODO 下订单 fix
     async onSubmit() {
       if (this.result.length == 0) {
         Toast.fail("请选择商品进行结算");
         return;
       }
-      const params = JSON.stringify(this.result);
-      // for(let i = 0; i < this.result.length; i++) {
-      //   await deleteCartItem(this.result[i])
-      // }
-      this.$router.push({ path: `mall/create-order?cartItemIds=${params}` });
+
+      // const params = {
+      //   action: "cart_save",
+      //   phone: this.phone,
+      //   cart_list: this.result,
+      //   goods_price: this.total,
+      // };
+      // const result = await fet("/shopmall/web_route.php", params, "post");
+
+      // const data = result.data;
+      // const code = data.code;
+
+      const cart_list = JSON.stringify(this.result);
+      this.$router.push({
+        path: `/mall/create-order?cart_list=${cart_list}&goods_price=${this.total}`,
+      });
     },
+    //TODO fix
     async deleteGood(id) {
-      //   const { data } = await deleteCartItem(id);
-      //   this.$store.dispatch("updateCart");
-      this.init();
+      const params = {
+        action: "cart_del",
+        phone: this.phone,
+        cart_idlist: [id],
+        // cart_idlist: JSON.stringify([id, "3"]),
+      };
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const data = result.data;
+      const code = data.code;
+
+      if (code == 200) {
+        this.$store.dispatch("updateCart");
+        this.init();
+      }
     },
     groupChange(result) {
       if (result.length == this.list.length) {
@@ -155,9 +204,9 @@ export default {
       }
       this.result = result;
     },
-    allCheck(value) {
-      if (!this.checkAll) {
-        this.result = this.list.map((item) => item.cartItemId);
+    allCheck() {
+      if (this.checkAll) {
+        this.result = this.list.map((item) => item.cart_id);
       } else {
         this.result = [];
       }
@@ -187,13 +236,15 @@ export default {
     }
   }
   .cart-body {
-    margin: 60px 0 100px 0;
+    margin: 0 0 100px 0;
     padding-left: 10px;
     .good-item {
       display: flex;
       .good-img {
+        padding: 10px;
         img {
-          .wh(100px, 100px);
+          .wh(80px, 80px);
+          vertical-align: bottom;
         }
       }
       .good-desc {
@@ -201,8 +252,9 @@ export default {
         flex-direction: column;
         justify-content: space-between;
         flex: 1;
-        padding: 20px;
+        padding: 20px 20px 20px 10px;
         .good-title {
+          font-size: 14px;
           display: flex;
           justify-content: space-between;
         }

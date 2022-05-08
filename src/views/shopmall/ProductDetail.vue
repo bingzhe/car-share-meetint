@@ -1,28 +1,29 @@
 <template>
   <div class="product-detail">
-    <s-header :name="'商品详情'"></s-header>
     <div class="detail-content">
       <div class="detail-swipe-wrap">
         <van-swipe class="my-swipe" indicator-color="#1baeae">
-          <van-swipe-item
-            v-for="(item, index) in detail.goodsCarouselList"
-            :key="index"
-          >
-            <img :src="prefix(item)" alt="" />
+          <!-- v-for="(item, index) in detail.goodsCarouselList" -->
+          <!-- :key="index" -->
+          <van-swipe-item>
+            <img :src="prefix(goodsInfo.goods_img)" alt="" />
           </van-swipe-item>
         </van-swipe>
       </div>
       <div class="product-info">
         <div class="product-title">
-          {{ detail.goodsName }}
+          {{ goodsInfo.goods_name }}
         </div>
-        <div class="product-desc">免邮费 顺丰快递</div>
+        <div class="product-desc">
+          {{ goodsInfo.goods_remarks }}
+        </div>
+        <!-- <div class="product-desc">包邮</div> -->
         <div class="product-price">
-          <span>¥{{ detail.sellingPrice }}</span>
-          <!-- <span>库存203</span> -->
+          <span>¥{{ goodsInfo.goods_price }}</span>
+          <span>库存{{ goodsInfo.goods_stock }}</span>
         </div>
       </div>
-      <div class="product-intro">
+      <!-- <div class="product-intro">
         <ul>
           <li>概述</li>
           <li>参数</li>
@@ -30,10 +31,10 @@
           <li>常见问题</li>
         </ul>
         <div class="product-content" v-html="detail.goodsDetailContent"></div>
-      </div>
+      </div> -->
     </div>
     <van-goods-action>
-      <van-goods-action-icon icon="chat-o" text="客服" />
+      <!-- <van-goods-action-icon icon="chat-o" text="客服" /> -->
       <van-goods-action-icon
         icon="cart-o"
         :info="!count ? '' : count"
@@ -57,21 +58,41 @@
 <script>
 // import { getDetail } from "../service/good";
 // import { addCart } from "../service/cart";
-import sHeader from "./components/SimpleHeader";
 import { Toast } from "vant";
+import { fet } from "@/api/constants.js";
+
 export default {
   data() {
     return {
-      detail: {
-        goodsCarouselList: [],
+      // detail: {
+      //   goodsCarouselList: [],
+      // },
+
+      phone: "",
+      //TODO
+      goodsInfo: {
+        goods_id: "1",
+        goods_price: "100",
+        goods_img:
+          "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+        category_id: "2",
+        goods_name: "测试",
+        goods_remarks: "测试测试测试测试测试测试",
+        goods_stock: "10",
+        ctime: "1651754649",
+        status: "1",
       },
     };
   },
-  components: {
-    sHeader,
-  },
   async mounted() {
     const { id } = this.$route.params;
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+    this.phone = userInfo.phone;
+    if (!this.phone) {
+      Toast("请先登录");
+    }
+    console.log(this.phone);
+    console.log(id);
     // const { data } = await getDetail(id);
     // this.detail = data;
   },
@@ -80,16 +101,25 @@ export default {
       this.$router.go(-1);
     },
     goTo() {
-      this.$router.push({ path: "/cart" });
+      this.$router.push({ path: "/mall/cart" });
     },
     async addCart() {
-      //   const { data, resultCode } = await addCart({
-      //     goodsCount: 1,
-      //     goodsId: this.detail.goodsId,
-      //   });
-      //   if (resultCode == 200) Toast.success("添加成功");
-      //   this.$store.dispatch("updateCart");
+      const params = {
+        action: "cart_save",
+        phone: this.phone,
+        goods_id: this.goodsInfo.goods_id,
+        goods_num: 1,
+      };
+
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const { data } = result;
+      const { code } = data;
+      console.log(code);
+
+      if (code == 200) Toast.success("添加成功");
+      this.$store.dispatch("updateCart");
     },
+    //TODO 立即购买
     async goToCart() {
       //   const { data, resultCode } = await addCart({
       //     goodsCount: 1,
@@ -128,7 +158,7 @@ export default {
     }
   }
   .detail-content {
-    margin-top: 44px;
+    // margin-top: 44px;
     .detail-swipe-wrap {
       .my-swipe .van-swipe-item {
         img {
@@ -143,6 +173,11 @@ export default {
         font-size: 18px;
         text-align: left;
         color: #333;
+      }
+      .product-desc {
+        font-size: 16px;
+        text-align: left;
+        color: #666;
       }
       .product-desc {
         font-size: 14px;

@@ -173,7 +173,7 @@ const routes = [
     path: "/mall/product/:id",
     name: "mallProduct",
     meta: {
-      index: 3,
+      title: "商品详情",
     },
     component: () => import("@/views/shopmall/ProductDetail.vue"),
   },

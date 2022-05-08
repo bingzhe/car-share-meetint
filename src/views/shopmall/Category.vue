@@ -49,6 +49,9 @@
                   </div>
                 </div>
               </div>
+              <div v-if="goodsList.length == 0" class="no-goods-tip">
+                暂无商品
+              </div>
             </div>
           </list-scroll>
         </div>
@@ -82,126 +85,6 @@ export default {
           goods_stock: "10",
           ctime: "1651754649",
           status: "1",
-        },
-        {
-          goods_id: "2",
-          goods_price: "200",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "4",
-          goods_name: "测试2",
-          goods_remarks: null,
-          goods_stock: "100",
-          ctime: "1651840254",
-          status: "1",
-        },
-        {
-          goods_id: "3",
-          goods_price: "12",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "3",
-          goods_name: "葡萄",
-          goods_remarks: null,
-          goods_stock: "100",
-          ctime: "1651840433",
-          status: "0",
-        },
-        {
-          goods_id: "4",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
-        },
-        {
-          goods_id: "5",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
-        },
-        {
-          goods_id: "6",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
-        },
-        {
-          goods_id: "7",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
-        },
-        {
-          goods_id: "8",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
-        },
-        {
-          goods_id: "9",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
-        },
-        {
-          goods_id: "99",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
-        },
-        {
-          goods_id: "422",
-          goods_price: "210",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "香水",
-          goods_remarks: null,
-          goods_stock: "10",
-          ctime: "1651840461",
-          status: "0",
         },
       ],
       currentIndex: 1,
@@ -239,9 +122,9 @@ export default {
     selectProduct(item) {
       this.$router.push({ path: `product-list?categoryId=${item.categoryId}` });
     },
-    //TODO 加入购物车
+    //商品详情
     addCart(record) {
-      console.log(record);
+      this.$router.push({ path: `/mall/product/${record.goods_id}` });
     },
   },
 };
@@ -422,5 +305,11 @@ export default {
       }
     }
   }
+}
+
+.no-goods-tip {
+  font-size: 14px;
+  color: #666;
+  line-height: 40px;
 }
 </style>
