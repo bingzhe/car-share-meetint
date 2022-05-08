@@ -96,10 +96,10 @@ export default {
   methods: {
     async init() {
       Toast.loading({ message: "加载中...", forbidClick: true });
-      const { addressId, cartItemIds } = this.$route.query;
+      const { addressId, cart_list } = this.$route.query;
 
-      const _cartItemIds = cartItemIds
-        ? JSON.parse(cartItemIds)
+      const _cartItemIds = cart_list
+        ? JSON.parse(cart_list)
         : JSON.parse(getLocal("cartItemIds"));
 
       setLocal("cartItemIds", JSON.stringify(_cartItemIds));
