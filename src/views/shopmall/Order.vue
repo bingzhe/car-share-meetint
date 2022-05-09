@@ -25,18 +25,15 @@
         @load="onLoad"
         @offset="300"
       >
-        <div v-for="(item, index) in list" :key="index" class="order-item-box">
-          <!-- @click="goTo(item.orderNo)" -->
+        <div
+          v-for="(item, index) in list"
+          :key="index"
+          class="order-item-box"
+          @click="goTo(item.order_id)"
+        >
           <div class="order-item-header">
             <span>订单时间：{{ item.ctime }}</span>
-            <van-button
-              size="small"
-              v-if="item.status == 1"
-              color="#4fc08d"
-              @click="payOrder(item)"
-              >去支付</van-button
-            >
-            <span v-else>{{ item.orderStatusString }}</span>
+            <span>{{ item.orderStatusString }}</span>
           </div>
           <van-card
             v-for="one in item.goods_list"
@@ -57,7 +54,7 @@
 // import sHeader from "./components/SimpleHeader";
 // import { getOrderList } from "../service/order";
 import { fet } from "@/api/constants.js";
-import { Toast, Button } from "vant";
+import { Toast } from "vant";
 import { WXinvoke } from "@/util/wxUtil";
 
 export default {
