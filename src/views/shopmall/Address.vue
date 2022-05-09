@@ -78,8 +78,6 @@ export default {
           isDefault: item.is_default === "1",
         };
       });
-
-      console.log(data);
     },
     onAdd() {
       this.$router.push({

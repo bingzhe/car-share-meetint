@@ -25,15 +25,18 @@
         @load="onLoad"
         @offset="300"
       >
-        <div
-          v-for="(item, index) in list"
-          :key="index"
-          class="order-item-box"
-          @click="goTo(item.orderNo)"
-        >
+        <div v-for="(item, index) in list" :key="index" class="order-item-box">
+          <!-- @click="goTo(item.orderNo)" -->
           <div class="order-item-header">
             <span>订单时间：{{ item.ctime }}</span>
-            <span>{{ item.orderStatusString }}</span>
+            <van-button
+              size="small"
+              v-if="item.status == 1"
+              color="#4fc08d"
+              @click="payOrder(item)"
+              >去支付</van-button
+            >
+            <span v-else>{{ item.orderStatusString }}</span>
           </div>
           <van-card
             v-for="one in item.goods_list"
@@ -54,7 +57,8 @@
 // import sHeader from "./components/SimpleHeader";
 // import { getOrderList } from "../service/order";
 import { fet } from "@/api/constants.js";
-import { Toast } from "vant";
+import { Toast, Button } from "vant";
+import { WXinvoke } from "@/util/wxUtil";
 
 export default {
   data() {
@@ -142,6 +146,23 @@ export default {
       this.loading = true;
       this.page = 1;
       this.onLoad();
+    },
+    async payOrder(item) {
+      Toast.loading;
+
+      const params = {
+        order_id: item.order_id,
+        user_id: item.user_id,
+      };
+
+      const result = await fet("public/wx/order_wxpay.php", params, "post");
+
+      WXinvoke(result, (response) => {
+        if (response.err_msg == "get_brand_wcpay_request:ok") {
+          this.$toast.success("支付成功");
+          this.$router.push("/mall/category");
+        }
+      });
     },
   },
 };

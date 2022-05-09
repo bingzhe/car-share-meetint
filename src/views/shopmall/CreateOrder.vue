@@ -151,7 +151,6 @@ export default {
 
       const result = await fet("/shopmall/web_route.php", params, "post");
       const data = result.data;
-      console.log(data);
       return data.result;
     },
     goTo() {
@@ -199,9 +198,9 @@ export default {
         order_id: this.orderNo,
         user_id: this.user_id,
       };
-      console.log(params);
+
       const result = await fet("public/wx/order_wxpay.php", params, "post");
-      console.log(result);
+
       WXinvoke(result, (response) => {
         if (response.err_msg == "get_brand_wcpay_request:ok") {
           this.$toast.success("支付成功");

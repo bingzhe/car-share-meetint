@@ -75,7 +75,6 @@ export default {
   },
   async mounted() {
     const { id } = this.$route.params;
-    console.log(id);
     const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
     this.phone = userInfo.phone;
     if (!this.phone) {

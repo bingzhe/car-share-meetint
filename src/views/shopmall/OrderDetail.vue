@@ -1,6 +1,6 @@
 <template>
   <div class="order-detail-box">
-    <s-header :name="'订单详情'" @callback="close"></s-header>
+    <!-- <s-header :name="'订单详情'" @callback="close"></s-header> -->
     <div class="order-status">
       <div class="status-item">
         <label>订单状态：</label>
@@ -59,13 +59,13 @@
     />
     <van-popup v-model="showPay" position="bottom" :style="{ height: '24%' }">
       <div :style="{ width: '90%', margin: '0 auto', padding: '20px 0' }">
-        <van-button
+        <!-- <van-button
           :style="{ marginBottom: '10px' }"
           color="#1989fa"
           block
           @click="payOrder(detail.orderNo, 1)"
           >支付宝支付</van-button
-        >
+        > -->
         <van-button color="#4fc08d" block @click="payOrder(detail.orderNo, 2)"
           >微信支付</van-button
         >
@@ -85,7 +85,7 @@ import sHeader from "./components/SimpleHeader";
 import { Dialog, Toast } from "vant";
 export default {
   components: {
-    sHeader,
+    // sHeader,
   },
   data() {
     return {
@@ -160,7 +160,7 @@ export default {
   background: #f7f7f7;
   .order-status {
     background: #fff;
-    margin-top: 44px;
+    // margin-top: 44px;
     padding: 20px;
     font-size: 15px;
     .status-item {

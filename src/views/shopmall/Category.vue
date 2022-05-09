@@ -102,7 +102,6 @@ export default {
         action: "get_categorylist",
       };
       const { data } = await fet("/shopmall/web_route.php", params, "post");
-      console.log(data);
       this.categoryData = data.result || [];
     },
     setWrapHeight() {
