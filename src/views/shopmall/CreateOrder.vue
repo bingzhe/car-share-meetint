@@ -2,27 +2,27 @@
   <div class="create-order">
     <div class="address-wrap">
       <div class="name" @click="goTo">
-        <span>{{ address.userName }} </span>
-        <span>{{ address.userPhone }}</span>
+        <span>{{ address.addressee }} </span>
+        <span>{{ address.phone }}</span>
       </div>
       <div class="address">
-        {{ address.provinceName }} {{ address.cityName }}
-        {{ address.regionName }} {{ address.detailAddress }}
+        {{ address.province }} {{ address.city }} {{ address.county }}
+        {{ address.address }}
       </div>
       <van-icon class="arrow" name="arrow" />
     </div>
     <div class="good">
       <div class="good-item" v-for="(item, index) in cartList" :key="index">
         <div class="good-img">
-          <img :src="prefix(item.goodsCoverImg)" alt="" />
+          <img :src="prefix(item.goods_img)" alt="" />
         </div>
         <div class="good-desc">
           <div class="good-title">
-            <span>{{ item.goodsName }}</span>
-            <span>x{{ item.goodsCount }}</span>
+            <span>{{ item.goods_name }}</span>
+            <span>x{{ item.goods_num }}</span>
           </div>
           <div class="good-btn">
-            <div class="price">¥{{ item.sellingPrice }}</div>
+            <div class="price">¥{{ item.goods_price }}</div>
           </div>
         </div>
       </div>
@@ -50,13 +50,13 @@
       @close="close"
     >
       <div :style="{ width: '90%', margin: '0 auto', padding: '50px 0' }">
-        <van-button
+        <!-- <van-button
           :style="{ marginBottom: '10px' }"
           color="#1989fa"
           block
           @click="payOrder(1)"
           >支付宝支付</van-button
-        >
+        > -->
         <van-button color="#4fc08d" block @click="payOrder(2)"
           >微信支付</van-button
         >
@@ -71,6 +71,9 @@
 // import { createOrder, payOrder } from "../service/order";
 import { setLocal, getLocal } from "@/util/util";
 import { Toast } from "vant";
+import { fet } from "@/api/constants.js";
+import { WXinvoke } from "@/util/wxUtil";
+
 export default {
   components: {},
   data() {
@@ -81,7 +84,10 @@ export default {
       address: {},
       showPay: false,
       orderNo: "",
+      user_id: "",
       cartItemIds: [],
+
+      total: "",
     };
   },
   mounted() {
@@ -96,30 +102,63 @@ export default {
   methods: {
     async init() {
       Toast.loading({ message: "加载中...", forbidClick: true });
-      const { addressId, cart_list } = this.$route.query;
+      const { addressId, cart_list, goods_price } = this.$route.query;
+
+      this.total = goods_price;
 
       const _cartItemIds = cart_list
         ? JSON.parse(cart_list)
         : JSON.parse(getLocal("cartItemIds"));
 
       setLocal("cartItemIds", JSON.stringify(_cartItemIds));
+
+      const cartIdList = _cartItemIds.join(",");
+      const params = {
+        action: "cart_list",
+        phone: this.phone, // 用户账号
+      };
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const { data } = result;
+      const cartList = data.result;
+
+      const goodslist = cartList.filter((item) => {
+        return cartIdList.indexOf(item.cart_id) > -1;
+      });
+
       //   const { data: list } = await getByCartItemIds({
       //     cartItemIds: _cartItemIds.join(","),
       //   });
-      //   const { data: address } = addressId
-      //     ? await getAddressDetail(addressId)
-      //     : await getDefaultAddress();
-      //   if (!address) {
-      //     this.$router.push({ path: "address" });
-      //     return;
-      //   }
-      //   this.cartList = list;
-      //   this.address = address;
-      //   Toast.clear();
+      const address = addressId
+        ? await this.getAddress(addressId)
+        : await this.getAddress();
+      if (!address) {
+        this.$router.push({ path: "/mall/address" });
+        return;
+      }
+
+      this.cartList = goodslist;
+      this.address = address;
+      Toast.clear();
+    },
+    async getAddress(id) {
+      const params = {
+        action: "get_default_address",
+        phone: this.phone,
+      };
+      if (id) {
+        params.address_id = id;
+      }
+
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const data = result.data;
+      console.log(data);
+      return data.result;
     },
     goTo() {
       this.$router.push({
-        path: `address?cartItemIds=${JSON.stringify(this.cartItemIds)}`,
+        path: `/mall/address?cartItemIds=${JSON.stringify(
+          this.cartItemIds
+        )}&goods_price=${this.total}`,
       });
     },
     deleteLocal() {
@@ -127,32 +166,61 @@ export default {
     },
     async createOrder() {
       const params = {
-        addressId: this.address.addressId,
-        cartItemIds: this.cartList.map((item) => item.cartItemId),
+        action: "order_save",
+        phone: this.phone,
+        address_id: this.address.address_id,
+        goods_price: this.total,
+        cart_list: this.cartList.map((item) => item.cart_id),
       };
+
+      const result = await fet("/shopmall/web_route.php", params, "post");
+
+      const data = result.data;
+      const code = data.code;
+
+      if (code == 200) {
+        setLocal("cartItemIds", "");
+        this.orderNo = data.result.order_id;
+        this.user_id = data.result.user_id;
+        this.showPay = true;
+      }
       //   const { data, resultCode } = await createOrder(params);
       //   setLocal("cartItemIds", "");
       //   this.orderNo = data;
       //   this.showPay = true;
     },
     close() {
-      this.$router.push({ path: "order" });
+      this.$router.push({ path: "/mall/category" });
     },
     async payOrder(type) {
       Toast.loading;
+
+      const params = {
+        order_id: this.orderNo,
+        user_id: this.user_id,
+      };
+      console.log(params);
+      const result = await fet("public/wx/order_wxpay.php", params, "post");
+      console.log(result);
+      WXinvoke(result, (response) => {
+        if (response.err_msg == "get_brand_wcpay_request:ok") {
+          this.$toast.success("支付成功");
+          this.$router.push("/mall/category");
+        }
+      });
       //   await payOrder({ orderNo: this.orderNo, payType: type });
       //   this.$router.push({ path: "order" });
     },
   },
-  computed: {
-    total: function () {
-      let sum = 0;
-      this.cartList.forEach((item) => {
-        sum += item.goodsCount * item.sellingPrice;
-      });
-      return sum;
-    },
-  },
+  // computed: {
+  //   total: function () {
+  //     let sum = 0;
+  //     this.cartList.forEach((item) => {
+  //       sum += item.goodsCount * item.sellingPrice;
+  //     });
+  //     return sum;
+  //   },
+  // },
 };
 </script>
 
@@ -220,7 +288,7 @@ export default {
     display: flex;
     .good-img {
       img {
-        .wh(100px, 100px);
+        .wh(80px, 80px);
       }
     }
     .good-desc {

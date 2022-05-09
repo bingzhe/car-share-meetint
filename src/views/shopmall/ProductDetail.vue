@@ -69,30 +69,27 @@ export default {
       // },
 
       phone: "",
-      //TODO
-      goodsInfo: {
-        goods_id: "1",
-        goods_price: "100",
-        goods_img:
-          "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-        category_id: "2",
-        goods_name: "测试",
-        goods_remarks: "测试测试测试测试测试测试",
-        goods_stock: "10",
-        ctime: "1651754649",
-        status: "1",
-      },
+
+      goodsInfo: {},
     };
   },
   async mounted() {
     const { id } = this.$route.params;
+    console.log(id);
     const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
     this.phone = userInfo.phone;
     if (!this.phone) {
       Toast("请先登录");
     }
-    console.log(this.phone);
-    console.log(id);
+
+    const params = {
+      action: "get_goods",
+      goods_id: id,
+    };
+    const result = await fet("/shopmall/web_route.php", params, "post");
+    const { data } = result;
+    this.goodsInfo = data.result;
+
     // const { data } = await getDetail(id);
     // this.detail = data;
   },
@@ -114,19 +111,27 @@ export default {
       const result = await fet("/shopmall/web_route.php", params, "post");
       const { data } = result;
       const { code } = data;
-      console.log(code);
 
-      if (code == 200) Toast.success("添加成功");
-      this.$store.dispatch("updateCart");
+      if (code == 200) {
+        Toast.success("添加成功");
+        this.$store.dispatch("updateCart");
+      }
     },
-    //TODO 立即购买
     async goToCart() {
-      //   const { data, resultCode } = await addCart({
-      //     goodsCount: 1,
-      //     goodsId: this.detail.goodsId,
-      //   });
-      //   this.$store.dispatch("updateCart");
-      //   this.$router.push({ path: "/cart" });
+      const params = {
+        action: "cart_save",
+        phone: this.phone,
+        goods_id: this.goodsInfo.goods_id,
+        goods_num: 1,
+      };
+
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const { data } = result;
+      const { code } = data;
+      if (code == 200) {
+        this.$store.dispatch("updateCart");
+        this.$router.push({ path: "/mall/cart" });
+      }
     },
   },
   computed: {

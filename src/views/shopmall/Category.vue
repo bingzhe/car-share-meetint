@@ -74,18 +74,18 @@ export default {
     return {
       categoryData: [],
       goodsList: [
-        {
-          goods_id: "1",
-          goods_price: "100",
-          goods_img:
-            "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
-          category_id: "2",
-          goods_name: "测试",
-          goods_remarks: "测试测试测试测试测试测试",
-          goods_stock: "10",
-          ctime: "1651754649",
-          status: "1",
-        },
+        // {
+        //   goods_id: "1",
+        //   goods_price: "100",
+        //   goods_img:
+        //     "https://newbee-mall.oss-cn-beijing.aliyuncs.com/images/watch-3-pro.png",
+        //   category_id: "2",
+        //   goods_name: "测试",
+        //   goods_remarks: "测试测试测试测试测试测试",
+        //   goods_stock: "10",
+        //   ctime: "1651754649",
+        //   status: "1",
+        // },
       ],
       currentIndex: 1,
     };

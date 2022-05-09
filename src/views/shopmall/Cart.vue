@@ -164,7 +164,7 @@ export default {
       }
 
       // const params = {
-      //   action: "cart_save",
+      //   action: "order_save",
       //   phone: this.phone,
       //   cart_list: this.result,
       //   goods_price: this.total,
@@ -179,13 +179,11 @@ export default {
         path: `/mall/create-order?cart_list=${cart_list}&goods_price=${this.total}`,
       });
     },
-    //TODO fix
     async deleteGood(id) {
       const params = {
         action: "cart_del",
         phone: this.phone,
         cart_idlist: [id],
-        // cart_idlist: JSON.stringify([id, "3"]),
       };
       const result = await fet("/shopmall/web_route.php", params, "post");
       const data = result.data;

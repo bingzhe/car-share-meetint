@@ -32,18 +32,18 @@
           @click="goTo(item.orderNo)"
         >
           <div class="order-item-header">
-            <span>订单时间：{{ item.createTime }}</span>
+            <span>订单时间：{{ item.ctime }}</span>
             <span>{{ item.orderStatusString }}</span>
           </div>
           <van-card
-            v-for="one in item.newBeeMallOrderItemVOS"
-            :key="one.orderId"
-            :num="one.goodsCount"
-            :price="one.sellingPrice"
-            desc="全场包邮"
-            :title="one.goodsName"
-            :thumb="prefix(one.goodsCoverImg)"
+            v-for="one in item.goods_list"
+            :key="one.goods_id"
+            :num="one.goods_num"
+            :price="one.goods_price"
+            :title="one.goods_name"
+            :thumb="prefix(one.goods_img)"
           />
+          <!-- desc="全场包邮" -->
         </div>
       </van-list>
     </van-pull-refresh>
@@ -51,12 +51,16 @@
 </template>
 
 <script>
-import sHeader from "./components/SimpleHeader";
+// import sHeader from "./components/SimpleHeader";
 // import { getOrderList } from "../service/order";
+import { fet } from "@/api/constants.js";
+import { Toast } from "vant";
 
 export default {
   data() {
     return {
+      phone: "",
+
       status: "",
       loading: false,
       finished: false,
@@ -67,10 +71,42 @@ export default {
   },
   components: {},
   async mounted() {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+    this.phone = userInfo.phone;
+    if (!this.phone) {
+      Toast("请先登录");
+    }
     // this.loadData()
   },
   methods: {
     async loadData() {
+      const params = {
+        action: "order_list",
+        phone: this.phone,
+        status: this.status,
+      };
+
+      if (this.status) {
+        params.status = this.status;
+      }
+
+      const result = await fet("/shopmall/web_route.php", params, "post");
+      const { data } = result;
+      this.list = data.result.map((item) => {
+        if (item.status == 1) {
+          item.orderStatusString = "待付款";
+        } else if (item.status == 2) {
+          item.orderStatusString = "待发货";
+        } else if (item.status == 3) {
+          item.orderStatusString = "已发货";
+        } else if (item.status == 4) {
+          item.orderStatusString = "交易完成";
+        }
+        return item;
+      });
+      this.loading = false;
+      this.finished = true;
+
       //   const {
       //     data,
       //     data: { list },
